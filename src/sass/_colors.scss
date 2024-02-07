@@ -4,27 +4,13 @@
 @import 'tweaks-temp';
 @import 'color-palette';
 
-$theme_default_color: if($variant == 'light', $grey-900, $grey-300);
-$theme_purple_color:  if($variant == 'light', $purple-400, $purple-300);
-$theme_pink_color:    if($variant == 'light', $pink-400, $pink-300);
-$theme_red_color:     if($variant == 'light', $red-600, $red-500);
-$theme_orange_color:  if($variant == 'light', $orange-700, $orange-600);
-$theme_yellow_color:  if($variant == 'light', $yellow-700, $yellow-a700);
-$theme_green_color:   if($variant == 'light', $green-500, $green-400);
-$theme_teal_color:    if($variant == 'light', $teal-500, $teal-300);
-$theme_blue_color:    if($variant == 'light', #3684dd, #5294e2);
+// imports $palette
+@import 'catppuccin';
 
-@if $color_type == 'nord' {
-  $theme_default_color: if($variant == 'light', #434c5e, #dbdee5);
-  $theme_purple_color:  if($variant == 'light', #b57daa, #c89dbf);
-  $theme_pink_color:    if($variant == 'light', #cd7092, #dc98b1);
-  $theme_red_color:     if($variant == 'light', #c35b65, #d4878f);
-  $theme_orange_color:  if($variant == 'light', #d0846c, #dca493);
-  $theme_yellow_color:  if($variant == 'light', #e4b558, #eac985);
-  $theme_green_color:   if($variant == 'light', #82ac5d, #a0c082);
-  $theme_teal_color:    if($variant == 'light', #63a6a5, #83b9b8);
-  $theme_blue_color:    if($variant == 'light', #5e81ac, #89a3c2);
-}
+$flavor: "mocha";
+$accent: "lavender";
+
+$flavor_colors: map-get($palette, $flavor);
 
 @function gtkalpha($c, $a) {
   @return unquote("alpha(#{$c}, #{$a})");
@@ -68,62 +54,19 @@ $theme_blue_color:    if($variant == 'light', #3684dd, #5294e2);
 }
 
 @function theme($color) {
-  @if ($theme == 'default') { @return $theme_default_color; }
-  @if ($theme == 'purple')  { @return $theme_purple_color; }
-  @if ($theme == 'pink')    { @return $theme_pink_color; }
-  @if ($theme == 'red')     { @return $theme_red_color; }
-  @if ($theme == 'orange')  { @return $theme_orange_color; }
-  @if ($theme == 'yellow')  { @return $theme_yellow_color; }
-  @if ($theme == 'green')   { @return $theme_green_color; }
-  @if ($theme == 'teal')    { @return $theme_teal_color; }
-  @if ($theme == 'blue')    { @return $theme_blue_color; }
+  @return map-get($flavor_colors, $accent);
 }
 
 @function background($type) {
-  @if ($color_type == 'nord') {
-    @if ($type == 'a') { @return #f9fafb; }
-    @if ($type == 'b') { @return #f3f4f6; }
-    @if ($type == 'c') { @return #f0f1f4; }
-    @if ($type == 'd') { @return #c4c9d4; }
+  @if ($type == 'a') { @return map-get($flavor_colors, "text"); }
+  @if ($type == 'b') { @return map-get($flavor_colors, "subtext1"); }
+  @if ($type == 'c') { @return map-get($flavor_colors, "subtext0"); }
+  @if ($type == 'd') { @return map-get($flavor_colors, "overlay2"); }
 
-    @if ($darker == 'true') {
-      @if ($type == 'e') { @return #1c1f26; }
-      @if ($type == 'f') { @return #1e222a; }
-      @if ($type == 'g') { @return #252a33; }
-      @if ($type == 'h') { @return #333a47; }
-    } @else {
-      @if ($type == 'e') { @return #292e38; }
-      @if ($type == 'f') { @return #2b303b; }
-      @if ($type == 'g') { @return #313744; }
-      @if ($type == 'h') { @return #404859; }
-    }
-  } @else {
-    @if ($type == 'a') { @return #FFFFFF; }
-    @if ($type == 'b') { @return #FAFAFA; }
-    @if ($type == 'c') { @return #F2F2F2; }
-    @if ($type == 'd') { @return #CCCCCC; }
-
-    @if ($color_type == 'blackness') {
-      @if ($type == 'e') { @return #000000; }
-      @if ($type == 'f') { @return #030303; }
-      @if ($type == 'g') { @return #0F0F0F; }
-      @if ($type == 'h') { @return #121212; }
-    }
-
-    @if ($color_type == 'default') {
-      @if ($darker == 'true') {
-        @if ($type == 'e') { @return #0A0A0A; }
-        @if ($type == 'f') { @return #141414; }
-        @if ($type == 'g') { @return #1F1F1F; }
-        @if ($type == 'h') { @return #292929; }
-      } @else {
-        @if ($type == 'e') { @return #212121; }
-        @if ($type == 'f') { @return #242424; }
-        @if ($type == 'g') { @return #2C2C2C; }
-        @if ($type == 'h') { @return #3C3C3C; }
-      }
-    }
-  }
+  @if ($type == 'e') { @return map-get($flavor_colors, "crust"); }
+  @if ($type == 'f') { @return map-get($flavor_colors, "mantle"); }
+  @if ($type == 'g') { @return map-get($flavor_colors, "base"); }
+  @if ($type == 'h') { @return map-get($flavor_colors, "surface0"); }
 }
 
 @function overlay($color, $state: 'normal') {
@@ -140,7 +83,7 @@ $theme_blue_color:    if($variant == 'light', #3684dd, #5294e2);
 //
 
 $primary:                               theme(color);
-$drop_target_color:                     $deep-orange-400;
+$drop_target_color:                     map-get($flavor_colors, "peach");
 $indicator:                             theme(color);
 $titlebar-indicator:                    if($variant == 'dark', currentColor, $primary);
 $inverse-indicator:                     if($theme == 'default', white, $primary);
@@ -183,12 +126,12 @@ $entry:                                 on($background, fill);
 // Misc colors
 //
 
-$link:                                  $blue-500;
-$link-visited:                          if($variant == 'light', $purple-500, $purple-200);
+$link:                                  map-get($flavor_colors, "blue");
+$link-visited:                          map-get($flavor_colors, "mauve");
 
-$warning:                               if($variant == 'light', #F4B400, #FDD633);
-$error:                                 if($variant == 'light', #D93025, #F28B82);
-$success:                               if($variant == 'light', #0F9D58, #81C995);
+$warning:                               map-get($flavor_colors, "yellow");
+$error:                                 map-get($flavor_colors, "red");
+$success:                               map-get($flavor_colors, "green");
 
 $suggested:                             $primary;
 $destructive:                           $error;
